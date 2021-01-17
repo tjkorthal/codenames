@@ -1,0 +1,13 @@
+.WordCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: linen;
+  color: black;
+}
+.WordCard:hover {
+  background-color: darkolivegreen;
+  color: white;
+  cursor: pointer;
+}
