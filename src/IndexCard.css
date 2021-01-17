@@ -1,13 +1,19 @@
-.WordCard {
+.IndexCard {
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
-  background-color: linen;
-  color: #282c34;
+  font-size: xx-large;
 }
-.WordCard:hover {
+
+.assassin {
+  background-color: black;
+}
+
+.agent {
   background-color: darkolivegreen;
-  color: white;
-  cursor: pointer;
+}
+
+.bystander {
+  background-color: linen;
 }
