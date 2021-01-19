@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import './App.css';
 import Board from './Board.js';
 
@@ -33,21 +34,29 @@ const identities = [
   'assassin', 'assassin', 'assassin',
   'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent',
   'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander'
-]
+];
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1 class='title'>Codenames</h1>
-        <Board cards={words.sort(() => Math.random() - 0.5)}
-          identities={identities.sort(() => Math.random() - 0.5)}
-        />
-        <button>Create New Game</button>
-        <button>Join Game</button>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1 class='title'>Codenames</h1>
+          <h2 class='title'>{ this.props.gameID }</h2>
+          <Board cards={ this.props.words }
+            identities={ this.props.identities }
+          />
+          <button>Create New Game</button>
+          <button>Join Game</button>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
+
+App.defaultProps = {
+  words: words.sort(() => Math.random() - 0.5),
+  identities: identities.sort(() => Math.random() - 0.5)
+}

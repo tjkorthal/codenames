@@ -1,25 +1,29 @@
+import React, { Component } from 'react';
 import './IndexCard.css';
 
-function IndexCard(props) {
-  const assassins = ['🔫', '💣', '🔪', '🗡'];
-  const agents = [
-    '🕵🏻‍♀️', '🕵🏼‍♀️', '🕵🏽‍♀️', '🕵🏾‍♀️', '🕵🏿‍♀️',
-    '🕵🏻', '🕵🏼', '🕵🏽', '🕵🏾', '🕵🏿',
-    '🕵🏻‍♂️', '🕵🏼‍♂️', '🕵🏽‍♂️', '🕵🏾‍♂️', '🕵🏿‍♂️'
-  ];
-  const bystanders = ['👵🏼', '👨🏽‍🦳', '👨🏻‍🦰', '👨🏾‍💼', '👮🏿‍♂️'];
-
-  let icon;
-  if (props.identity === 'assassin') {
-    icon = assassins[Math.floor(Math.random() * assassins.length)];
-  } else if (props.identity === 'agent') {
-    icon = agents[Math.floor(Math.random() * agents.length)];
+const assassins = ['🔫', '💣', '🔪', '🗡'];
+const agents = [
+  '🕵🏻‍♀️', '🕵🏼‍♀️', '🕵🏽‍♀️', '🕵🏾‍♀️', '🕵🏿‍♀️',
+  '🕵🏻', '🕵🏼', '🕵🏽', '🕵🏾', '🕵🏿',
+  '🕵🏻‍♂️', '🕵🏼‍♂️', '🕵🏽‍♂️', '🕵🏾‍♂️', '🕵🏿‍♂️'
+];
+const bystanders = ['👵🏼', '👨🏽‍🦳', '👨🏻‍🦰', '👨🏾‍💼', '👮🏿‍♂️'];
+class IndexCard extends Component {
+  icon() {
+    if (this.props.identity === 'assassin') {
+      return assassins[Math.floor(Math.random() * assassins.length)];
+    } else if (this.props.identity === 'agent') {
+      return agents[Math.floor(Math.random() * agents.length)];
+    }
+    return '';
   }
-  return (
-    <div className={`IndexCard ${props.identity}`}>
-      { icon }
-    </div>
-  );
+  render() {
+    return (
+      <div className={`IndexCard ${this.props.identity}`}>
+        { this.icon() }
+      </div>
+    );
+  }
 }
 
 export default IndexCard;

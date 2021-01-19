@@ -1,11 +1,14 @@
-import './WordCard.css'
+import React, { Component } from 'react';
+import './WordCard.css';
 
-function WordCard(props) {
-  return (
-    <div className="WordCard">
-      { props.text }
-    </div>
-  );
+class WordCard extends Component {
+  render() {
+    return (
+      <div className="WordCard">
+        { this.props.text }
+      </div>
+    );
+  }
 }
 
 export default WordCard;
