@@ -47,12 +47,29 @@ class App extends Component {
   constructor() {
     super();
     this.createGame = this.createGame.bind(this);
+    this.loadGame = this.loadGame.bind(this);
     this.state = {
       words: wordMap
     };
   }
   createGame() {
     axios.post('http://localhost:3000/game/create')
+         .then(response => {
+           console.log(response);
+           this.setState({
+             words: response.data.words,
+             gameID: response.data.code
+            });
+         })
+         .catch(function(error) {
+          console.error(error);
+        });
+  }
+  loadGame() {
+    let gameID = document.getElementById('gameCode').value;
+    if (!gameID) { return; }
+
+    axios.get(`http://localhost:3000/game/${gameID}`)
          .then(response => {
            console.log(response);
            this.setState({
@@ -72,7 +89,8 @@ class App extends Component {
           <h2 className='title'>{ this.state.gameID }</h2>
           <Board words={ this.state.words }/>
           <button onClick={ this.createGame }>Create New Game</button>
-          <button>Join Game</button>
+          <input id='gameCode' placeholder='CODE' size='4'></input>
+          <button onClick={ this.loadGame }>Join Game</button>
         </header>
       </div>
     );
