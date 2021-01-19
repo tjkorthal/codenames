@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
-import './Board.css';
 import WordCard from './WordCard.js';
-import IndexCard from './IndexCard.js';
+import './Board.css';
 
-let floatRight = {
-  float: 'right'
-};
-
-let floatLeft = {
-  float: 'left'
-};
 class Board extends Component {
   render () {
     return (
       <div>
-        <div className="Board" style={floatLeft}>
+        <div className="Board">
          {
-          this.props.cards.map((text, index) => <WordCard value={index} text={text}/>)
+          this.props.words.map((word) => <WordCard value={ word.value } identity={ word.identity }/>)
          }
-        </div>
-        <div className="Board" style={floatRight}>
-          {
-            this.props.identities.map((identity, index) => <IndexCard identity={identity} value={index}/>)
-          }
         </div>
       </div>
     );

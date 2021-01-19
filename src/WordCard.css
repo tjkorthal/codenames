@@ -3,11 +3,32 @@
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
-  background-color: linen;
-  color: #282c34;
 }
 .WordCard:hover {
   background-color: darkolivegreen;
   color: white;
   cursor: pointer;
+}
+
+.assassin {
+  background-color: black;
+}
+
+.agent {
+  background-color: darkolivegreen;
+}
+
+.bystander {
+  background-color: linen;
+  color: black;
+}
+
+.icon ~ .word {
+  position: relative;
+  top: -20px;
+}
+
+.icon {
+  position: relative;
+  right: -40px;
 }

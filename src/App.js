@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Board from './Board.js';
 
-const words = [
+const wordList = [
   'night',
   'arrival',
   'blood',
@@ -28,13 +28,13 @@ const words = [
   'midnight',
   'uncle',
   'ear'
-];
+].sort(() => Math.random() - 0.5);
 
 const identities = [
   'assassin', 'assassin', 'assassin',
   'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent', 'agent',
   'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander'
-];
+].sort(() => Math.random() - 0.5);
 
 class App extends Component {
   render() {
@@ -43,9 +43,7 @@ class App extends Component {
         <header className="App-header">
           <h1 class='title'>Codenames</h1>
           <h2 class='title'>{ this.props.gameID }</h2>
-          <Board cards={ this.props.words }
-            identities={ this.props.identities }
-          />
+          <Board words={ this.props.words }/>
           <button>Create New Game</button>
           <button>Join Game</button>
         </header>
@@ -56,7 +54,12 @@ class App extends Component {
 
 export default App;
 
+let wordMap = wordList.map(function(word, index){
+  return {
+    value: word,
+    identity: identities[index]
+  };
+});
 App.defaultProps = {
-  words: words.sort(() => Math.random() - 0.5),
-  identities: identities.sort(() => Math.random() - 0.5)
+  words: wordMap
 }
