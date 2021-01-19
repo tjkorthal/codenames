@@ -8,7 +8,7 @@ class Board extends Component {
       <div>
         <div className="Board">
          {
-          this.props.words.map((word) => <WordCard value={ word.value } identity={ word.identity }/>)
+          this.props.words.map((word) => <WordCard value={ word.value } identity={ word.identity } key={ word.value }/>)
          }
         </div>
       </div>

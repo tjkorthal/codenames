@@ -1,33 +1,34 @@
 import React, { Component } from 'react';
 import './App.css';
 import Board from './Board.js';
+import axios from 'axios';
 
 const wordList = [
-  'night',
-  'arrival',
-  'blood',
-  'cousin',
-  'boyfriend',
-  'climate',
-  'country',
-  'oasis',
-  'procedure',
-  'pizza',
-  'media',
-  'fortune',
-  'mall',
-  'injury',
-  'bread',
-  'disease',
-  'writer',
-  'diamond',
-  'guitar',
-  'assistant',
-  'football',
-  'student',
-  'midnight',
-  'uncle',
-  'ear'
+  'NIGHT',
+  'ARRIVAL',
+  'BLOOD',
+  'COUSIN',
+  'BOYFRIEND',
+  'CLIMATE',
+  'COUNTRY',
+  'OASIS',
+  'PROCEDURE',
+  'PIZZA',
+  'MEDIA',
+  'FORTUNE',
+  'MALL',
+  'INJURY',
+  'BREAD',
+  'DISEASE',
+  'WRITER',
+  'DIAMOND',
+  'GUITAR',
+  'ASSISTANT',
+  'FOOTBALL',
+  'STUDENT',
+  'MIDNIGHT',
+  'UNCLE',
+  'EAR'
 ].sort(() => Math.random() - 0.5);
 
 const identities = [
@@ -36,15 +37,41 @@ const identities = [
   'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander', 'bystander'
 ].sort(() => Math.random() - 0.5);
 
+const wordMap = wordList.map(function(word, index){
+  return {
+    value: word,
+    identity: identities[index]
+  };
+});
 class App extends Component {
+  constructor() {
+    super();
+    this.createGame = this.createGame.bind(this);
+    this.state = {
+      words: wordMap
+    };
+  }
+  createGame() {
+    axios.post('http://localhost:3000/game/create')
+         .then(response => {
+           console.log(response);
+           this.setState({
+             words: response.data.words,
+             gameID: response.data.code
+            });
+         })
+         .catch(function(error) {
+          console.error(error);
+        });
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 class='title'>Codenames</h1>
-          <h2 class='title'>{ this.props.gameID }</h2>
-          <Board words={ this.props.words }/>
-          <button>Create New Game</button>
+          <h1 className='title'>Codenames</h1>
+          <h2 className='title'>{ this.state.gameID }</h2>
+          <Board words={ this.state.words }/>
+          <button onClick={ this.createGame }>Create New Game</button>
           <button>Join Game</button>
         </header>
       </div>
@@ -53,13 +80,3 @@ class App extends Component {
 }
 
 export default App;
-
-let wordMap = wordList.map(function(word, index){
-  return {
-    value: word,
-    identity: identities[index]
-  };
-});
-App.defaultProps = {
-  words: wordMap
-}
