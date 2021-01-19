@@ -1,6 +1,6 @@
 class GameController < ApplicationController
   def create
-    game = Game.new
+    game = GameGenerator.new
     render json: {
       code: game.code,
       player: 1,
