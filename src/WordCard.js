@@ -55,7 +55,9 @@ class WordCard extends Component {
     return this.props.player === 1 ? this.state.identity1 : this.state.identity2
   }
   makeGuess() {
-    // TODO: return if already guessed
+    // TODO: consider if it's the current player's turn
+    if (!this.props.gameID || (this.state.identity1 && this.state.identity2)) { return; }
+
     axios.post('http://localhost:3000/game/guess',
               {
                 game: {
