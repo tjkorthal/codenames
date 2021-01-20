@@ -58,7 +58,8 @@ class App extends Component {
            console.log(response);
            this.setState({
              words: response.data.words,
-             gameID: response.data.code
+             gameID: response.data.code,
+             player: response.data.player
             });
          })
          .catch(function(error) {
@@ -74,7 +75,8 @@ class App extends Component {
            console.log(response);
            this.setState({
              words: response.data.words,
-             gameID: response.data.code
+             gameID: response.data.code,
+             player: response.data.player
             });
          })
          .catch(function(error) {
@@ -87,7 +89,10 @@ class App extends Component {
         <header className="App-header">
           <h1 className='title'>Codenames</h1>
           <h2 className='title'>{ this.state.gameID }</h2>
-          <Board words={ this.state.words }/>
+          <Board words={ this.state.words }
+                 gameID={ this.state.gameID }
+                 player={ this.state.player }>
+          </Board>
           <button onClick={ this.createGame }>Create New Game</button>
           <input id='gameCode' placeholder='CODE' size='4'></input>
           <button onClick={ this.loadGame }>Join Game</button>

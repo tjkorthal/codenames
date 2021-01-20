@@ -10,20 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_211752) do
+ActiveRecord::Schema.define(version: 2021_01_20_002852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
     t.string "code"
-    t.jsonb "words"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "word_bank", force: :cascade do |t|
     t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "game_code", null: false
+    t.string "value", null: false
+    t.string "identity1", null: false
+    t.string "identity2", null: false
+    t.boolean "p1_guessed", default: false
+    t.boolean "p2_guessed", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

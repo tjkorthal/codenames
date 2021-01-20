@@ -2,7 +2,7 @@
 # TODO: determine if this is actually useful, or if I can inline the code
 # generation
 class CodeGenerator
-  @@seed = Random.new(3009)
+  @@seed = Random.new
   LETTERS = ('A'..'Z').to_a.freeze
 
   def self.code

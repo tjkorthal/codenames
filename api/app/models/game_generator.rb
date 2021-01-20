@@ -3,7 +3,9 @@ class GameGenerator
 
   def initialize
     values = WordBank.select(:value).order('random()').limit(25).map(&:value)
-    words = values.map { |value| Word.new(value) }
+    @code = CodeGenerator.code
+    Game.create(code: @code)
+    words = values.map { |value| Word.new(value: value, game_code: @code) }
     words.each_with_index do |word, index|
       case index
       when 0
@@ -35,8 +37,6 @@ class GameGenerator
         word.identity2 = :bystander
       end
     end
-    @words = words.shuffle
-    @code = CodeGenerator.code
-    Game.create(code: @code, words: @words)
+    @words = words.shuffle.each(&:save!)
   end
 end
