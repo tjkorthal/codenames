@@ -4,7 +4,13 @@ class GameController < ApplicationController
     render json: {
       code: game.code,
       player: 1,
-      words: game.words.map { |word| { value: word.value, identity: word.identity1 } }
+      words: game.words.map do |word|
+        {
+          value: word.value,
+          identity1: word.identity1,
+          # identity2: word.p2_guessed ? word.identity2 : nil
+        }
+      end
     }
   end
 
@@ -13,7 +19,12 @@ class GameController < ApplicationController
     render json: {
       code: game.code,
       player: 2,
-      words: game.words.map { |word| { value: word['value'], identity: word['identity2'] } }
+      words: game.words.map do |word|
+        {
+          value: word['value'],
+          identity2: word['identity2']
+        }
+      end
     }
   end
 
@@ -29,9 +40,7 @@ class GameController < ApplicationController
     word.game.destroy if identity.eql?('assassin')
     # TODO: switch current player if there are other clues to give
     # game.update(current_player_turn: player.eql?(1) ? 2 : 1) if !identity.eql?('agent')
-    render json: {
-      identity: identity
-    }
+    render json: word
   end
 
   private

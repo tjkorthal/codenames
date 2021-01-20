@@ -40,7 +40,7 @@ const identities = [
 const wordMap = wordList.map(function(word, index){
   return {
     value: word,
-    identity: identities[index]
+    identity1: identities[index]
   };
 });
 class App extends Component {
@@ -49,7 +49,8 @@ class App extends Component {
     this.createGame = this.createGame.bind(this);
     this.loadGame = this.loadGame.bind(this);
     this.state = {
-      words: wordMap
+      words: wordMap,
+      player: 1
     };
   }
   createGame() {

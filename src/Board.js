@@ -11,7 +11,8 @@ class Board extends Component {
     return (
       <WordCard
         value={ word.value }
-        identity={ word.identity }
+        identity1={ word.identity1 }
+        identity2={ word.identity2 }
         key={ word.value }
         gameID={ this.props.gameID }
         player={ this.props.player }
