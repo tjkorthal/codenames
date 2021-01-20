@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   post 'game/create', to: 'game#create'
   get 'game/:code', to: 'game#load'
   post 'game/guess', to: 'game#guess'
+  post 'game/end_turn', to: 'game#end_turn'
 end
