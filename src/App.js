@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { createConsumer } from '@rails/actioncable';
 import './App.css';
 import Board from './Board.js';
 import Sidebar from './Sidebar.js';
@@ -48,6 +49,7 @@ class App extends Component {
   constructor() {
     super();
     this.createGame = this.createGame.bind(this);
+    this.createConnection = this.createConnection.bind(this);
     this.loadGame = this.loadGame.bind(this);
     this.onGuess = this.onGuess.bind(this);
     this.state = {
@@ -55,6 +57,26 @@ class App extends Component {
       player: 1, // TODO: move to props
       playerTurn: 1
     };
+  }
+  createConnection(gameID) {
+    let self = this;
+    const consumer = createConsumer('http://localhost:3000/cable');
+    consumer.subscriptions.create({ channel: "ApplicationCable::GameChannel", game_code: gameID },
+      {
+        received(data) {
+          console.log(data)
+          if (data.word) {
+            let word = self.state.words.find(word => word.value === data.word.value);
+            Object.assign(word, data.word);
+            self.setState({ words: self.state.words });
+          }
+          self.setState({
+            gameStatus: data.game.status,
+            playerTurn: data.game.current_player_turn
+          })
+        }
+      }
+    );
   }
   createGame() {
     axios.post('http://localhost:3000/game/create')
@@ -66,6 +88,7 @@ class App extends Component {
              player: response.data.player,
              gameStatus: response.data.game_status
             });
+           this.createConnection(response.data.code);
          })
          .catch(function(error) {
           console.error(error);
@@ -83,6 +106,7 @@ class App extends Component {
              player: response.data.player,
              gameStatus: response.data.game_status
             });
+           this.createConnection(response.data.code);
          })
          .catch(function(error) {
           console.error(error);

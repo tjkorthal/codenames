@@ -39,6 +39,7 @@ class GameController < ApplicationController
     render json: @game.toggle_current_player
   end
 
+  # TODO: move this out of the controller. This is messy
   def guess
     word = Word.find_by(value: guess_params['word'], game_code: guess_params['code'])
     player = guess_params['player'].to_i
@@ -56,6 +57,16 @@ class GameController < ApplicationController
       @game.update(status: 'Mission failed')
       @game.destroy
     end
+    payload = { game: @game }
+    unless identity.eql?('bystander')
+      # pretend they're the same so they show up the same on both screens
+      word.identity1 = identity
+      word.identity2 = identity
+      payload.tap do |hash|
+        hash[:word] = word
+      end
+    end
+    ActionCable.server.broadcast("game_#{@game.code}", payload)
     render json: {
       word: word,
       game: @game

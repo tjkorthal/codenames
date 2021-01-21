@@ -16,16 +16,15 @@ class WordCard extends Component {
     this.identity = this.identity.bind(this);
     this.secretIdentity = this.secretIdentity.bind(this);
     this.coverWord = this.coverWord.bind(this);
+    this.wordOrIcon = this.wordOrIcon.bind(this);
     this.state = {
       value: this.props.value,
       identity1: this.props.identity1,
-      identity2: this.props.identity2,
-      p1_guessed: this.props.p1_guessed,
-      p2_guessed: this.props.p2_guessed
+      identity2: this.props.identity2
     }
   }
   // show bystander icon for words the other player still needs to guess
-  bystanderIcon() {
+  bystanderIcon () {
     if (this.secretIdentity() !== 'bystander') { return; }
     return (
       <div className='icon'>
@@ -34,7 +33,7 @@ class WordCard extends Component {
     );
   }
   // replace word with agent/assassin and change card color to match
-  coverWord() {
+  coverWord () {
     let secretIdentity = this.secretIdentity();
     this.setState({
       value: this.icon(secretIdentity),
@@ -43,7 +42,7 @@ class WordCard extends Component {
      }
     );
   }
-  icon(identity) {
+  icon (identity) {
     if (identity === 'assassin') {
       return assassins[Math.floor(Math.random() * assassins.length)];
     } else if (identity === 'agent') {
@@ -52,7 +51,7 @@ class WordCard extends Component {
     return bystanders[Math.floor(Math.random() * bystanders.length)];;
   }
   identity () {
-    return this.props.player === 1 ? this.state.identity1 : this.state.identity2
+    return this.props.player === 1 ? this.state.identity1 : this.state.identity2;
   }
   makeGuess() {
     // TODO: consider if it's the current player's turn
@@ -86,12 +85,16 @@ class WordCard extends Component {
   secretIdentity () {
     return this.props.player === 1 ? this.state.identity2 : this.state.identity1
   }
+  wordOrIcon () {
+    if (this.props.identity1 === this.props.identity2) { return this.icon(this.props.identity1); }
+    return this.state.value;
+  }
   render() {
     return (
       <div onClick={ this.makeGuess } className={`WordCard ${this.identity()}`}>
         { this.bystanderIcon() }
         <div className='word'>
-          { this.state.value }
+          { this.wordOrIcon() }
         </div>
       </div>
     );
