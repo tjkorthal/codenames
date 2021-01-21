@@ -16,19 +16,14 @@ class Board extends Component {
         key={ word.value }
         gameID={ this.props.gameID }
         player={ this.props.player }
-        onGuess={ this.onGuess }
+        onGuess={ this.props.onGuess }
       />
     );
   }
-  onGuess (params) {
-    console.log(params)
-  }
   render () {
     return (
-      <div>
-        <div className="Board">
-         { this.props.words.map(this.createWordCard) }
-        </div>
+      <div className="Board">
+        { this.props.words.map(this.createWordCard) }
       </div>
     );
   }

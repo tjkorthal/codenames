@@ -2,11 +2,12 @@ class GameController < ApplicationController
   before_action :find_game, only: [:end_turn, :guess]
 
   def create
-    game = GameGenerator.new
+    generator = GameGenerator.new
     render json: {
-      code: game.code,
-      player: 1,
-      words: game.words.map do |word|
+      code: generator.code,
+      player: generator.game.current_player_turn,
+      game_status: generator.game.status,
+      words: generator.words.map do |word|
         {
           value: word.value,
           identity1: word.identity1
@@ -16,10 +17,11 @@ class GameController < ApplicationController
   end
 
   def load
-    @game = Game.find_by(code: guess_params['code'])
+    @game = Game.find_by(code: params['code'])
     render json: {
       code: @game.code,
       player: 2,
+      game_status: @game.status,
       words: @game.words.map do |word|
         {
           value: word['value'],
@@ -48,10 +50,16 @@ class GameController < ApplicationController
     identity = player.eql?(1) ? word.identity2 : word.identity1
     # TODO: add round limit + miss limit rules
     # TODO: reveal all agents on loss
-    @game.destroy if identity.eql?('assassin')
     # TODO: only switch player if there are other clues to give
     @game.toggle_current_player unless identity.eql?('agent')
-    render json: word
+    if identity.eql?('assassin')
+      @game.update(status: 'Mission failed')
+      @game.destroy
+    end
+    render json: {
+      word: word,
+      game: @game
+    }
   end
 
   private

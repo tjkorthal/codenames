@@ -1,10 +1,10 @@
 class GameGenerator
-  attr_reader :words, :code
+  attr_reader :words, :code, :game
 
   def initialize
     values = WordBank.select(:value).order('random()').limit(25).map(&:value)
     @code = CodeGenerator.code
-    Game.create(code: @code)
+    @game = Game.create(code: @code)
     words = values.map { |value| Word.new(value: value, game_code: @code) }
     words.each_with_index do |word, index|
       case index

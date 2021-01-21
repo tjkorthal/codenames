@@ -67,9 +67,10 @@ class WordCard extends Component {
                 }
               })
          .then(response => {
+           let word = response.data.word
            this.setState({
-            identity1: response.data.identity1,
-            identity2: response.data.identity2
+            identity1: word.identity1,
+            identity2: word.identity2
            }
           );
            //  don't overwrite word with bystander icon

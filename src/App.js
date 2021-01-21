@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Board from './Board.js';
+import Sidebar from './Sidebar.js';
 import axios from 'axios';
 
 const wordList = [
@@ -48,9 +49,11 @@ class App extends Component {
     super();
     this.createGame = this.createGame.bind(this);
     this.loadGame = this.loadGame.bind(this);
+    this.onGuess = this.onGuess.bind(this);
     this.state = {
       words: wordMap,
-      player: 1
+      player: 1, // TODO: move to props
+      playerTurn: 1
     };
   }
   createGame() {
@@ -60,7 +63,8 @@ class App extends Component {
            this.setState({
              words: response.data.words,
              gameID: response.data.code,
-             player: response.data.player
+             player: response.data.player,
+             gameStatus: response.data.game_status
             });
          })
          .catch(function(error) {
@@ -73,16 +77,22 @@ class App extends Component {
 
     axios.get(`http://localhost:3000/game/${gameID}`)
          .then(response => {
-           console.log(response);
            this.setState({
              words: response.data.words,
              gameID: response.data.code,
-             player: response.data.player
+             player: response.data.player,
+             gameStatus: response.data.game_status
             });
          })
          .catch(function(error) {
           console.error(error);
         });
+  }
+  onGuess (params) {
+    this.setState({
+      gameStatus: params.game.status,
+      playerTurn: params.game.current_player_turn
+    })
   }
   render() {
     return (
@@ -92,8 +102,14 @@ class App extends Component {
           <h2 className='title'>{ this.state.gameID }</h2>
           <Board words={ this.state.words }
                  gameID={ this.state.gameID }
-                 player={ this.state.player }>
+                 player={ this.state.player }
+                 onGuess={ this.onGuess }>
           </Board>
+          <Sidebar playerTurn={ this.state.playerTurn }
+                   player={ this.state.player }
+                   gameID={ this.state.gameID }
+                   gameStatus={ this.state.gameStatus }
+          />
           <button onClick={ this.createGame }>Create New Game</button>
           <input id='gameCode' placeholder='CODE' size='4'></input>
           <button onClick={ this.loadGame }>Join Game</button>
