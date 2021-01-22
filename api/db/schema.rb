@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_22_174023) do
+ActiveRecord::Schema.define(version: 2021_01_22_212951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2021_01_22_174023) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "current_player_turn", default: 1
     t.string "status", default: "in progress"
+    t.integer "turns_remaining", default: 9
   end
 
   create_table "word_bank", force: :cascade do |t|

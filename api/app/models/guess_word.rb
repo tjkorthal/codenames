@@ -40,18 +40,24 @@ class GuessWord
   def handle_assassin
     # TODO: reveal all agents on loss
     word.update(reveal: 'assassin')
-    game.update(status: 'Mission failed')
-    game.destroy
+    mission_failed
     ActionCable.server.broadcast("game_#{game_code}", { game: game, word: word })
   end
 
   def handle_bystander
-    # TODO: add round limit + miss limit rules
-    # TODO: reveal all agents on loss
     # only switch player if there are other clues to give
-    @game.toggle_current_player unless no_agents_remaining?
+    game.toggle_current_player unless no_agents_remaining?
+    # TODO: reveal all agents on loss
+    # TODO: account for sudden death round
+    game.update(turns_remaining: game.turns_remaining - 1)
+    mission_failed if game.turns_remaining.eql?(0)
     # FIXME: no longer reveals bystanders on guess
     ActionCable.server.broadcast("game_#{game_code}", { game: game })
+  end
+
+  def mission_failed
+    game.update(status: 'Mission failed')
+    game.destroy
   end
 
   def revealed_identity
