@@ -51,7 +51,6 @@ class App extends Component {
     this.createGame = this.createGame.bind(this);
     this.createConnection = this.createConnection.bind(this);
     this.loadGame = this.loadGame.bind(this);
-    this.onGuess = this.onGuess.bind(this);
     this.state = {
       words: wordMap,
       player: 1, // TODO: move to props
@@ -81,7 +80,6 @@ class App extends Component {
   createGame() {
     axios.post('http://localhost:3000/game/create')
          .then(response => {
-           console.log(response);
            this.setState({
              words: response.data.words,
              gameID: response.data.code,
@@ -111,12 +109,6 @@ class App extends Component {
          .catch(function(error) {
           console.error(error);
         });
-  }
-  onGuess (params) {
-    this.setState({
-      gameStatus: params.game.status,
-      playerTurn: params.game.current_player_turn
-    })
   }
   render() {
     return (

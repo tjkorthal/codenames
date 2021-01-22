@@ -7,9 +7,10 @@ class Sidebar extends Component {
 
     if (this.props.gameStatus === 'in progress') {
       return this.whoseTurn()
-    } else {
-      return this.props.gameStatus
+    } else if (this.props.gameStatus === 'Mission success') {
+      return 'Mission accomplished!'
     }
+    return this.props.gameStatus
   }
   whoseTurn () {
     if (this.props.playerTurn === this.props.player) {

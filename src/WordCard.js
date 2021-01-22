@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './WordCard.css';
 import axios from 'axios';
 
@@ -9,37 +9,21 @@ const agents = [
   '🕵🏻‍♂️', '🕵🏼‍♂️', '🕵🏽‍♂️', '🕵🏾‍♂️', '🕵🏿‍♂️'
 ];
 const bystanders = ['👵🏼', '👨🏽‍🦳', '👨🏻‍🦰', '👨🏾‍💼', '👮🏿‍♂️'];
-class WordCard extends Component {
+class WordCard extends PureComponent {
   constructor(props) {
     super(props);
     this.makeGuess = this.makeGuess.bind(this);
     this.identity = this.identity.bind(this);
     this.secretIdentity = this.secretIdentity.bind(this);
-    this.coverWord = this.coverWord.bind(this);
     this.wordOrIcon = this.wordOrIcon.bind(this);
-    this.state = {
-      value: this.props.value,
-      identity1: this.props.identity1,
-      identity2: this.props.identity2
-    }
   }
-  // show bystander icon for words the other player still needs to guess
+  // TODO: show bystander icon for words the other player still needs to guess
   bystanderIcon () {
-    if (this.secretIdentity() !== 'bystander') { return; }
+    if (this.secretIdentity() !== 'bystander' || this.props.reveal) { return; }
     return (
       <div className='icon'>
-        { this.icon(this.state.identity) }
+        { this.icon('bystander') }
       </div>
-    );
-  }
-  // replace word with agent/assassin and change card color to match
-  coverWord () {
-    let secretIdentity = this.secretIdentity();
-    this.setState({
-      value: this.icon(secretIdentity),
-      identity1: secretIdentity,
-      identity2: secretIdentity
-     }
     );
   }
   icon (identity) {
@@ -51,11 +35,12 @@ class WordCard extends Component {
     return bystanders[Math.floor(Math.random() * bystanders.length)];;
   }
   identity () {
-    return this.props.player === 1 ? this.state.identity1 : this.state.identity2;
+    if (this.props.reveal) { return this.props.reveal; }
+    return this.props.player === 1 ? this.props.identity1 : this.props.identity2;
   }
   makeGuess() {
     // TODO: consider if it's the current player's turn
-    if (!this.props.gameID || (this.state.identity1 && this.state.identity2)) { return; }
+    if (!this.props.gameID || (this.props.identity1 && this.props.identity2)) { return; }
 
     axios.post('http://localhost:3000/game/guess',
               {
@@ -66,28 +51,20 @@ class WordCard extends Component {
                 }
               })
          .then(response => {
-           let word = response.data.word
-           this.setState({
-            identity1: word.identity1,
-            identity2: word.identity2
-           }
-          );
-           //  don't overwrite word with bystander icon
-           if (this.secretIdentity() !== 'bystander') {
-             this.coverWord();
-           }
-           this.props.onGuess(response.data);
+          // TODO: something here?
+          // As long as it succeeds we're good. Currently relying on
+          // webhooks to update both players.
          })
          .catch(function(error) {
           console.error(error);
         });
   }
   secretIdentity () {
-    return this.props.player === 1 ? this.state.identity2 : this.state.identity1
+    return this.props.player === 1 ? this.props.identity2 : this.props.identity1
   }
   wordOrIcon () {
-    if (this.props.identity1 === this.props.identity2) { return this.icon(this.props.identity1); }
-    return this.state.value;
+    if (this.props.reveal) { return this.icon(this.props.reveal); }
+    return this.props.value;
   }
   render() {
     return (
